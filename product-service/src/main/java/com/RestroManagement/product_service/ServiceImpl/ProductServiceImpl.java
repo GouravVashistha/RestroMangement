@@ -4,19 +4,24 @@ import com.RestroManagement.product_service.DTO.ProductDto;
 import com.RestroManagement.product_service.Entity.Product;
 import com.RestroManagement.product_service.Repository.ProductRepository;
 import com.RestroManagement.product_service.Service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private ModelMapper modelMapper;
-
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -25,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
         // Save the Product entity to the repository
         Product addProduct = this.productRepository.save(product);
+        log.info("Product saved");
 
         // Convert the saved Product entity back to ProductDto
         return this.modelMapper.map(addProduct, ProductDto.class);
