@@ -1,6 +1,7 @@
 package com.RestroManagement.product_service.ServiceImpl;
 
 import com.RestroManagement.product_service.DTO.ProductDto;
+import com.RestroManagement.product_service.DTO.ProductResponce;
 import com.RestroManagement.product_service.Entity.Product;
 import com.RestroManagement.product_service.Repository.ProductRepository;
 import com.RestroManagement.product_service.Service.ProductService;
@@ -10,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -35,4 +39,18 @@ public class ProductServiceImpl implements ProductService {
         // Convert the saved Product entity back to ProductDto
         return this.modelMapper.map(addProduct, ProductDto.class);
     }
+
+    public List<ProductResponce> getAllProduct() {
+        List<Product> products = productRepository.findAll();
+        List<ProductDto> prodDtos = products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .collect(Collectors.toList());
+
+        List<ProductResponce> productResponses = prodDtos.stream()
+                .map(dto -> modelMapper.map(dto, ProductResponce.class))
+                .collect(Collectors.toList());
+
+        return productResponses;
+    }
+
 }
