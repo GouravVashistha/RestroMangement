@@ -3,6 +3,7 @@ package com.RestroManagement.product_service.ServiceImpl;
 import com.RestroManagement.product_service.DTO.ProductDto;
 import com.RestroManagement.product_service.DTO.ProductResponce;
 import com.RestroManagement.product_service.Entity.Product;
+import com.RestroManagement.product_service.Exceptions.ResourceNotFoundException;
 import com.RestroManagement.product_service.Repository.ProductRepository;
 import com.RestroManagement.product_service.Service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,27 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
 
         return productResponses;
+    }
+
+    @Override
+    public ProductDto updateProduct(ProductDto productDto, Integer id) {
+        Product existingProduct = this.productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("product", "Product Id", id));
+
+        existingProduct.setName(productDto.getName());
+        existingProduct.setDescription(productDto.getDescription());
+        existingProduct.setPrice(productDto.getPrice());
+
+        Product updatedProduct = this.productRepository.save(existingProduct);
+        return  this.modelMapper.map(updatedProduct, ProductDto.class);
+    }
+
+    @Override
+    public String deleteProductById(Integer id) {
+        Product existingProduct  = this.productRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("product", "Product Id", id));
+        productRepository.deleteById(id);
+        return "Product Is deleted Successfully";
     }
 
 }
