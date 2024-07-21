@@ -38,4 +38,11 @@ public class OrderServiceImpl implements OrderService {
         // Convert the saved Order entity back to OrderDTO
         return modelMapper.map(savedOrder, OrderDTO.class);
     }
+
+    public List<OrderDTO> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(order -> modelMapper.map(order, OrderDTO.class))
+                .collect(Collectors.toList());
+    }
 }
