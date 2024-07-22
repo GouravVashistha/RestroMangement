@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
         // Convert the saved Order entity back to OrderDTO
         return modelMapper.map(savedOrder, OrderDTO.class);
     }
+
+    @Override
 
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
