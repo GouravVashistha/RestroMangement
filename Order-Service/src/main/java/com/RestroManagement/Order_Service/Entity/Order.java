@@ -18,6 +18,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
+
     private String orderNumber;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
